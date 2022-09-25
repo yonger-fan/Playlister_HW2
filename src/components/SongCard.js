@@ -9,6 +9,12 @@ export default class SongCard extends React.Component {
             draggedTo: false
         }
     }
+
+    handleClick = (event) => {
+        event.stopPropagation();
+        this.props.editSongCallback(this.props.index, this.props.song);
+    }
+
     handleDragStart = (event) => {
         event.dataTransfer.setData("song", event.target.id);
         this.setState(prevState => ({
@@ -75,6 +81,7 @@ export default class SongCard extends React.Component {
             <div
                 id = {'song-' + num}
                 className = {itemClass + 'list-card ' + 'unselected-list-card'} 
+                onDoubleClick={this.handleClick}
                 onDragStart={this.handleDragStart}
                 onDragOver={this.handleDragOver}
                 onDragEnter={this.handleDragEnter}

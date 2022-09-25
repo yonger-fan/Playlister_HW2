@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class EditSongModal extends Component {
     render() {
         const { editSongCallback, hideEditSongModalCallback } = this.props;
-    
+       
         return (
             <div 
                 class="modal" 
