@@ -85,7 +85,7 @@ export default class ListCard extends React.Component {
                     <input
                         type="button"
                         id={"delete-list-" + keyNamePair.key}
-                        className="list-card-button"
+                        className= {"list-card-button"}
                         onClick={this.handleDeleteList}
                         value={"🗑"} />
                 </div>

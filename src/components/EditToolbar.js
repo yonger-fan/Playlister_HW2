@@ -1,10 +1,20 @@
 import React from "react";
 
 export default class EditToolbar extends React.Component {
-    /*handleClick = (event) => {
-        const { createNewSongCallback } = this.props;
-        createNewSongCallback();
-    };*/
+    /*handleKeyPress = (event) => {
+        if (event.key === "z" && event.ctrlKey) {
+            //this.props.undo();
+            alert('ctrl + z');
+            this.props.undo();
+        }
+    }
+
+    handleKey = (event) => {
+        if (event.code === "ctrl + Y") {
+            this.props.redo();
+        }
+    }*/
+
     render() {
         const { canAddSong, canUndo, canRedo, canClose, 
                 undoCallback, redoCallback, closeCallback,createNewSongCallback} = this.props;
@@ -12,10 +22,10 @@ export default class EditToolbar extends React.Component {
         let undoClass = "toolbar-button";
         let redoClass = "toolbar-button";
         let closeClass = "toolbar-button";
-        if (canAddSong) addSongClass += " disabled";
-        if (canUndo) undoClass += " disabled";
-        if (canRedo) redoClass += " disabled";
-        if (canClose) closeClass += " disabled";
+        if (!canAddSong) addSongClass += " disabled";
+        if (!canUndo) undoClass += " disabled";
+        if (!canRedo) redoClass += " disabled";
+        if (!canClose) closeClass += " disabled";
         return (
             <div id="edit-toolbar">
             <input 
@@ -31,6 +41,7 @@ export default class EditToolbar extends React.Component {
                 value="⟲" 
                 className={undoClass} 
                 onClick={undoCallback}
+                //onKeyPress={this.handleKeyPress}
             />
             <input 
                 type="button" 
@@ -38,6 +49,7 @@ export default class EditToolbar extends React.Component {
                 value="⟳" 
                 className={redoClass} 
                 onClick={redoCallback}
+                //onKeyPress={this.handleKey}
             />
             <input 
                 type="button" 
