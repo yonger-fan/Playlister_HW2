@@ -11,6 +11,8 @@ import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
 
+import EditSongModal from './components/EditSongModal.js';
+
 // THESE REACT COMPONENTS ARE IN OUR UI
 import Banner from './components/Banner.js';
 import EditToolbar from './components/EditToolbar.js';
@@ -86,6 +88,33 @@ class App extends React.Component {
             // SO IS STORING OUR SESSION DATA
             this.db.mutationUpdateSessionData(this.state.sessionData);
         });
+    }
+
+    createNewSong = () => {
+        let list = this.state.currentList;
+        let newTitle = "Untitled";
+        let newArtist = "Unknown";
+        let newYouTubeId = "dQw4w9WgXcQ";
+
+        let newSong = {
+            title: newTitle,
+            artist: newArtist,
+            youTubeId : newYouTubeId
+        };
+
+        list.songs = [...this.state.currentList.songs, newSong];
+       
+
+        this.setState(prevState => ({
+            listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
+            currentList : list,
+            sessionData : this.state.sessionData
+        }), () => {
+            // UPDATING THE LIST IN PERMANENT STORAGE
+            // IS AN AFTER EFFECT
+            this.db.mutationUpdateList(this.state.currentList);
+        });
+
     }
     // THIS FUNCTION BEGINS THE PROCESS OF DELETING A LIST.
     deleteList = (key) => {
@@ -274,6 +303,21 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
+
+    editSong(){
+
+    }
+
+    showEditSongModal() {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.add("is-visible");
+    }
+
+    hideEditSong(){
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.remove("is-visible");
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -297,6 +341,7 @@ class App extends React.Component {
                     canUndo={canUndo}
                     canRedo={canRedo}
                     canClose={canClose} 
+                    createNewSongCallback = {this.createNewSong}
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
@@ -304,6 +349,8 @@ class App extends React.Component {
                 <PlaylistCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} />
+                    editSongCallback = {this.editSong}
+                    hideEditSongModalCallback = {this.hideEditSong}
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
