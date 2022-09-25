@@ -54,12 +54,17 @@ export default class SongCard extends React.Component {
         this.props.moveCallback(sourceId, targetId);
     }
 
+    handleDeleteSong = (event) => {
+        event.stopPropagation();
+        this.props.deleteSongCallback(this.props.index, this.props.song);
+    }
+
     getItemNum = () => {
         return this.props.id.substring("playlist-song-".length);
     }
 
     render() {
-        const { song } = this.props;
+        const { song, index } = this.props;
         let num = this.getItemNum();
         console.log("num: " + num);
         let itemClass = "playlister-song";
@@ -89,6 +94,7 @@ export default class SongCard extends React.Component {
                     type = "button"
                     id = {"delete-song-" + num}
                     className = {"list-card-button"}
+                    onClick={this.handleDeleteSong}
                     value = {"X"} />
             </div>
         )
