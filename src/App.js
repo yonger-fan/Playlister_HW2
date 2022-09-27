@@ -51,7 +51,8 @@ class App extends React.Component {
             songOldArtist : null,
             songOldYouTubeId: null,
             isRunned: false,
-            thisModalState: false
+            thisModalState: false,
+            thisState: false
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -317,7 +318,7 @@ class App extends React.Component {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
             this.tps.clearAllTransactions();
-            this.modalState(false);
+            //this.modalState(false);
         });
     }
     // THIS FUNCTION BEGINS THE PROCESS OF CLOSING THE CURRENT LIST
@@ -325,13 +326,12 @@ class App extends React.Component {
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             currentList: null,
-            sessionData: this.state.sessionData
+            sessionData: this.state.sessionData,
+            thisState: true
         }), () => {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
             this.tps.clearAllTransactions();
-            this.db.mutationUpdateSessionData(this.state.sessionData);
-            this.modalState(true);
         });
     }
     setStateWithUpdatedList = (list) => {
@@ -457,6 +457,13 @@ class App extends React.Component {
             thisModalState : value
         }));
     }
+
+    modalCloseListState = () =>{
+        this.setState(prevState => ({
+            thisState : false
+        }));
+    }
+
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
     showDeleteListModal =() =>{
@@ -528,7 +535,19 @@ class App extends React.Component {
             canUndo = false;
             canRedo = false;
             canClose = false;
+        } 
+
+        if (this.state.thisState){
+            canAddSong = false;
+            canUndo = false;
+            canRedo = false;
+            canClose = false; 
+            this.modalCloseListState();
         }
+
+        if(!canRedo) canRedo = false;
+
+
         return (
             <div id="root">
                 <Banner />
@@ -542,6 +561,7 @@ class App extends React.Component {
                     deleteListCallback={this.markListForDeletion}
                     loadListCallback={this.loadList}
                     renameListCallback={this.renameList}
+                    modalStateCallback={this.modalState}
                 />
                 <EditToolbar
                     canAddSong={canAddSong}

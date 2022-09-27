@@ -32,6 +32,7 @@ export default class ListCard extends React.Component {
         this.setState({
             editActive: !this.state.editActive
         });
+        this.props.modalStateCallback(true);
     }
     handleUpdate = (event) => {
         this.setState({ text: event.target.value });
@@ -47,6 +48,7 @@ export default class ListCard extends React.Component {
         console.log("ListCard handleBlur: " + textValue);
         this.props.renameListCallback(key, textValue);
         this.handleToggleEdit();
+        this.props.modalStateCallback(false);
     }
 
     render() {
