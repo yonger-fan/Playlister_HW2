@@ -1,20 +1,6 @@
 import React from "react";
 
 export default class EditToolbar extends React.Component {
-    /*handleKeyPress = (event) => {
-        if (event.key === "z" && event.ctrlKey) {
-            //this.props.undo();
-            alert('ctrl + z');
-            this.props.undo();
-        }
-    }
-
-    handleKey = (event) => {
-        if (event.code === "ctrl + Y") {
-            this.props.redo();
-        }
-    }*/
-
     render() {
         const { canAddSong, canUndo, canRedo, canClose, 
                 undoCallback, redoCallback, closeCallback,createNewSongCallback} = this.props;

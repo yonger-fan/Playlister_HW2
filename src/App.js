@@ -50,7 +50,8 @@ class App extends React.Component {
             songOldTitle : null,
             songOldArtist : null,
             songOldYouTubeId: null,
-            isRunned: false
+            isRunned: false,
+            thisModalState: false
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -416,6 +417,7 @@ class App extends React.Component {
             sessionData: prevState.sessionData
         }), () => {
             // PROMPT THE USER
+
             this.showDeleteListModal();
         });
     }
@@ -446,30 +448,41 @@ class App extends React.Component {
             this.showEditSongModal();
         });
     }
+
+    modalState = (value) =>{
+        this.setState(prevState => ({
+            thisModalState : value
+        }));
+    }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
-    showDeleteListModal() {
+    showDeleteListModal =() =>{
+        this.modalState(true);
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteListModal () {
+    hideDeleteListModal =() =>{
+        this.modalState(false);
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
 
 
-    showDeleteSongModal () {
+    showDeleteSongModal =() =>{
+        this.modalState(true);
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteSongModal () {
+    hideDeleteSongModal =() =>{
+        this.modalState(false);
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
     }
 
-    showEditSongModal () {
+    showEditSongModal =() =>{
+        this.modalState(true);
         let modal = document.getElementById("edit-song-modal");
         document.getElementById("tname").value = this.state.songOldTitle;
         document.getElementById("aname").value = this.state.songOldArtist;
@@ -477,7 +490,8 @@ class App extends React.Component {
         modal.classList.add("is-visible");
     }
 
-    hideEditSongModal () {
+    hideEditSongModal =() =>{
+        this.modalState(false);
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
     }
@@ -495,14 +509,22 @@ class App extends React.Component {
     }  
 
     render() {
-        let canAddList = this.state.currentList == null;
+        let canAddList = this.state.currentList === null;
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
-        let canClose = this.state.currentList !== null;
+        let canClose = this.state.currentList !== null; 
         if (!this.state.isRunned){
             this.handleKeyDown();
             this.state.isRunned = true;
+        }
+
+        if (this.state.thisModalState){
+            canAddList = false;
+            canAddSong = false;
+            canUndo = false;
+            canRedo = false;
+            canClose = false;
         }
         return (
             <div id="root">
